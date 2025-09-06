@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"/>
+  <meta name="theme-color" content="#000000"/>
+  <title>BuyRebsell · Check List Final</title>
+  <style>
+    :root{--bg:#000;--panel:#1c1c1e;--ink:#f5f5f7;--muted:#a1a1a6;--line:#2c2c2e;--accent:#0a84ff;--ok:#30d158;--bad:#ff453a}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Arial,sans-serif}
+    a{color:var(--accent)}
+    header{position:sticky;top:0;z-index:50;background:rgba(28,28,30,.9);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+    .bar{max-width:1100px;margin:auto;padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between}
+    .title{display:flex;gap:10px;align-items:center}
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+    h1{margin:0;font-size:16px}
+    .pill{background:var(--panel);border:1px solid var(--line);padding:4px 10px;border-radius:999px;font-size:12px}
+
+    main{max-width:1100px;margin:16px auto;padding:0 12px 80px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+    .section{padding:14px}
+    .stack{display:grid;gap:12px}
+    .section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:8px;flex-wrap:wrap}
+    .section-title h2{margin:0;font-size:15px}
+    .muted{color:var(--muted)}
+
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    .grid2{display:grid;grid-template-columns:1fr;gap:12px}
+    @media (min-width:720px){.grid2{grid-template-columns:1fr 1fr}}
+
+    label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+    input[type=text],input[type=date],input[type=number],textarea{width:100%;background:#2c2c2e;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px;outline:0}
+    input[type=file]{border:1px dashed var(--line);padding:10px;border-radius:10px;background:#2c2c2e;color:var(--muted)}
+    textarea{min-height:90px;resize:vertical}
+    input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(10,132,255,.35)}
+
+    .checklist{display:grid;gap:8px}
+    .item-row{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--line);background:#2c2c2e;border-radius:10px;padding:8px}
+    .item-row input[type=checkbox]{margin-top:2px;accent-color:var(--accent)}
+    .item{flex:1;min-width:200px}
+    .actions{margin-left:auto}
+
+    .btn{appearance:none;border:1px solid var(--line);background:#2c2c2e;color:var(--ink);font-weight:600;padding:9px 12px;border-radius:10px;cursor:pointer;min-height:44px}
+    .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .btn.ghost{background:transparent}
+    .btn.small{padding:6px 9px;font-size:12px;min-height:36px}
+    .progress{height:6px;background:#3a3a3c;border-radius:999px;overflow:hidden}
+    .progress>i{display:block;height:100%;width:0;background:var(--accent)}
+    .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#2c2c2e;border:1px solid var(--line);font-size:12px}
+
+    .list{margin-top:10px;overflow-x:auto}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+    th{color:var(--muted);font-weight:600}
+
+    .toolbar{position:sticky;bottom:0;background:rgba(28,28,30,.95);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:10px}
+    .toolbar .wrap{max-width:1100px;margin:auto;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+
+    /* Modal de ejemplos */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:12px}
+    .modal.open{display:flex}
+    .modal .box{max-width:95%;background:#1c1c1e;border:1px solid var(--line);border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,.7);overflow:hidden}
+    .box header{padding:10px 12px;background:#2c2c2e;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+    .box header h3{margin:0;font-size:15px}
+    .box .content{padding:10px}
+    .box img{max-width:100%;height:auto;border-radius:8px}
+    .close{background:transparent;border:0;color:var(--ink);font-size:20px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <div class="title"><span class="dot"></span><h1>BuyRebsell · Inspección Final</h1></div>
+      <div class="pill" id="costHeader">Costos: —</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="card section stack" id="formCard">
+      <div class="section-title">
+        <h2>Datos de la inspección</h2>
+        <div class="chip"><span id="statusChip">En progreso · 0%</span></div>
+      </div>
+      <div class="progress"><i id="progressBar"></i></div>
+      <div class="grid2">
+        <div>
+          <label>Inspector</label>
+          <input id="inspector" type="text" placeholder="Nombre y apellido"/>
+        </div>
+        <div>
+          <label>Fecha</label>
+          <input id="date" type="date"/>
+        </div>
+        <div>
+          <label>Dirección</label>
+          <input id="address" type="text" placeholder="Calle, número, ciudad"/>
+        </div>
+        <div class="grid2">
+          <div>
+            <label>Costo inicial (USD)</label>
+            <input id="costInit" type="number" min="0" step="0.01" placeholder="0.00"/>
+          </div>
+          <div>
+            <label>Costo final (USD)</label>
+            <input id="costFinal" type="number" min="0" step="0.01" placeholder="0.00"/>
+          </div>
+        </div>
+        <div>
+          <label>Adjuntar PDF de costos (opcional)</label>
+          <input id="costPdf" type="file" accept="application/pdf"/>
+        </div>
+        <div>
+          <label>Adjuntar fotos (puedes seleccionar varias)</label>
+          <input id="photos" type="file" accept="image/*" multiple/>
+        </div>
+        <div style="grid-column:1/-1">
+          <label>Comentarios</label>
+          <textarea id="comments" placeholder="Notas generales, pendientes, observaciones"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section stack">
+      <div class="section-title">
+        <h2>Checklist</h2>
+        <div style="display:flex;gap:8px">
+          <button class="btn small ghost" id="btnExpand">Mostrar/Ocultar todo</button>
+        </div>
+      </div>
+      <div id="sections" class="stack"></div>
+    </section>
+
+    <section class="card section stack">
+      <div class="section-title"><h2>Historial</h2><span class="muted" id="historyCount">0 registros</span></div>
+      <div class="list">
+        <table id="historyTable">
+          <thead><tr><th>Fecha</th><th>Dirección</th><th>Inspector</th><th>Completado</th><th>Inicial</th><th>Final</th><th>Acciones</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div class="toolbar">
+    <div class="wrap">
+      <button class="btn" id="btnClear">Limpiar</button>
+      <button class="btn" id="btnExpand2">Colapsar/Expandir</button>
+      <button class="btn" id="btnPdf">Exportar PDF</button>
+      <button class="btn primary" id="btnSave">Guardar inspección</button>
+    </div>
+  </div>
+
+  <!-- Modal de ejemplo visual -->
+  <div class="modal" id="exampleModal" role="dialog" aria-modal="true">
+    <div class="box" style="width:min(840px,96vw)">
+      <header><h3 id="exTitle">Ejemplo</h3><button class="close" onclick="closeExample()">×</button></header>
+      <div class="content">
+        <img id="exImage" alt="Ejemplo"/>
+        <p class="muted" id="exCaption" style="margin-top:8px"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    // ===== CHECKLIST COMPLETO (10 secciones) =====
+    const CHECKLIST = [
+      {title:'1. Exterior', items:[
+        ['exterior_fachada','Fachada limpia, pintura uniforme, sin grietas ni manchas.'],
+        ['exterior_techo','Techo: sin tejas sueltas, faltantes o dañadas. Revisar sellados en chimeneas, ventilas y claraboyas.'],
+        ['exterior_canaletas','Canaletas y bajantes: firmes, sin fugas ni obstrucciones.'],
+        ['exterior_ventanas_puertas','Ventanas y puertas exteriores: que cierren bien, burletes en buen estado, pintura sin descascarar.'],
+        ['exterior_caminos','Caminos, entradas y estacionamiento: nivelados, sin grietas peligrosas.'],
+        ['exterior_jardin','Patio/jardín: césped cuidado, cercas firmes, portones funcionando.'],
+        ['exterior_luces','Iluminación exterior en funcionamiento (entrada, patio, garaje).']
+      ]},
+      {title:'2. Estructura y Seguridad', items:[
+        ['estructura_paredes','Paredes interiores y exteriores sin grietas mayores.'],
+        ['estructura_pisos','Pisos firmes, sin desniveles ni ruidos al caminar.'],
+        ['estructura_escaleras','Escaleras y barandas sólidas y seguras.'],
+        ['estructura_atico_sotano','Ático y sótano: sin filtraciones, humedad ni madera podrida.'],
+        ['estructura_detectores','Detectores de humo y monóxido de carbono instalados y funcionando.'],
+        ['estructura_extintor','Extintor de incendios en cocina.']
+      ]},
+      {title:'3. Instalación Eléctrica', items:[
+        ['electrica_tablero','Tablero eléctrico ordenado, con disyuntores correctamente rotulados.'],
+        ['electrica_gfci','Tomas de corriente y enchufes probados (incluyendo GFCI en cocina, baños, garaje y exterior).'],
+        ['electrica_interruptores','Interruptores funcionando en todas las habitaciones.'],
+        ['electrica_luces','Luces interiores y exteriores funcionando.'],
+        ['electrica_cableado','Cableado visible sin empalmes inseguros.']
+      ]},
+      {title:'4. Plomería', items:[
+        ['plomeria_fugas','Tuberías sin fugas visibles en cocina, baños, lavandería y sótano.'],
+        ['plomeria_presion','Presión de agua adecuada en todas las llaves.'],
+        ['plomeria_agua_caliente','Agua caliente funcionando.'],
+        ['plomeria_drenaje','Drenaje fluido en lavabos, duchas, bañeras y fregaderos (sin retorno de agua).'],
+        ['plomeria_inodoros','Inodoros firmes, sin filtraciones en la base, con buen flujo.'],
+        ['plomeria_calentador','Tanque de agua o calentador revisado, sin fugas ni corrosión.']
+      ]},
+      {title:'5. Climatización (HVAC)', items:[
+        ['hvac_ac','Aire acondicionado funcionando correctamente, flujo de aire uniforme.'],
+        ['hvac_calefaccion','Calefacción en buen estado, probada en todas las áreas.'],
+        ['hvac_termostato','Termostato digital funcionando.'],
+        ['hvac_filtros','Filtros de aire nuevos o limpios.'],
+        ['hvac_conductos','Conductos revisados, sin escapes de aire.']
+      ]},
+      {title:'6. Cocina', items:[
+        ['cocina_electro','Electrodomésticos (horno, estufa, microondas, lavavajillas, campana extractora, nevera si se incluye) funcionando.'],
+        ['cocina_gabinetes','Gabinetes alineados, puertas y cajones abren y cierran bien.'],
+        ['cocina_encimeras','Encimeras sin grietas ni manchas.'],
+        ['cocina_fregadero','Fregadero sellado, sin fugas.'],
+        ['cocina_ventilacion','Ventilación adecuada.'],
+        ['cocina_silicona','Sellos de silicona (fregadero, encimeras, esquinas) prolijos y bien hechos.']
+      ]},
+      {title:'7. Baños', items:[
+        ['banos_griferia','Grifería sin goteos, sellos de silicona intactos.'],
+        ['banos_extractor','Ventilador/extractor funcionando.'],
+        ['banos_azulejos','Azulejos y pisos firmes, sin filtraciones.'],
+        ['banos_accesorios','Accesorios (toalleros, espejos, lámparas) instalados correctamente.'],
+        ['banos_inodoro','Inodoro nivelado y firme.'],
+        ['banos_silicona','Todos los sellos de silicona (duchas, bañeras, lavabos, esquinas) bien hechos y prolijos.']
+      ]},
+      {title:'8. Interior General', items:[
+        ['interior_pintura','Pintura pareja, sin manchas ni retoques visibles.'],
+        ['interior_puertas','Puertas y cerraduras funcionando sin fricción.'],
+        ['interior_ventanas','Ventanas abren y cierran suavemente, vidrios limpios y sin fisuras.'],
+        ['interior_pisos','Pisos nivelados, sin huecos ni levantamientos (cerámica, madera, vinilo, alfombra).'],
+        ['interior_techos','Techos sin manchas de humedad.'],
+        ['interior_molduras','Molduras, zócalos y terminaciones prolijas.'],
+        ['interior_silicona','Sellos de silicona en cualquier unión (ventanas, lavabos, encimeras, detalles) prolijos y bien aplicados.']
+      ]},
+      {title:'9. Garaje / Espacios Auxiliares', items:[
+        ['garaje_puerta','Puerta de garaje abre y cierra correctamente (motor si es eléctrico).'],
+        ['garaje_electricidad','Iluminación y tomacorrientes funcionando.'],
+        ['garaje_piso','Piso limpio, sin grietas graves.'],
+        ['garaje_almacen','Espacio de almacenamiento ordenado y seguro.']
+      ]},
+      {title:'10. Detalles Finales de Venta', items:[
+        ['venta_olores','Olores neutros (sin humedad, pintura fuerte o químicos).'],
+        ['venta_ventanas_limpias','Ventanas limpias (para buena entrada de luz).'],
+        ['venta_llaves','Todas las llaves y controles remotos organizados y etiquetados.'],
+        ['venta_manuales','Manuales de electrodomésticos disponibles.'],
+        ['venta_fotos','Documentar con fotos todo lo verificado.']
+      ]}
+    ];
+
+    // Ejemplos: placeholders por defecto
+    const EXAMPLE_URLS = Object.fromEntries(CHECKLIST.flatMap(sec=>sec.items).map(([k])=>[k,'https://via.placeholder.com/1200x700?text='+encodeURIComponent(k)]));
+
+    const sectionsEl = document.getElementById('sections');
+    function renderSections(){
+      sectionsEl.innerHTML='';
+      CHECKLIST.forEach((sec, sidx)=>{
+        const wrap=document.createElement('div');wrap.className='card section';
+        const head=document.createElement('div');head.className='section-title';
+        head.innerHTML=`<h2>${sec.title}</h2><div><button class="btn small ghost" onclick="toggleSection(${sidx})">Mostrar/Ocultar</button></div>`;
+        const list=document.createElement('div');list.className='checklist';list.id='sec_'+sidx;
+        sec.items.forEach(([key,text])=>{
+          const row=document.createElement('div');row.className='item-row';
+          row.innerHTML=`<input type="checkbox" data-key="${key}" onchange="updateProgress();updateHeaderCosts()"/>
+            <span class="item">${text}</span>
+            <div class="actions">
+              <button type="button" class="btn small" onclick="showExample('${key}','${text.replace(/"/g,'&quot;')}')">Ver ejemplo</button>
+            </div>`;
+          list.appendChild(row);
+        });
+        wrap.appendChild(head);wrap.appendChild(list);sectionsEl.appendChild(wrap);
+      });
+    }
+    renderSections();
+
+    function toggleSection(i){
+      const el=document.getElementById('sec_'+i); el.style.display = el.style.display==='none' ? '' : 'none';
+    }
+    document.getElementById('btnExpand').addEventListener('click',()=>{
+      const lists=[...document.querySelectorAll('.checklist')];
+      const shouldHide=lists.some(el=>el.style.display!=='none');
+      lists.forEach(el=>{ el.style.display= shouldHide? 'none' : ''});
+    });
+    document.getElementById('btnExpand2').addEventListener('click',()=>document.getElementById('btnExpand').click());
+
+    // Modal ejemplos visuales
+    function showExample(key, caption){
+      const m=document.getElementById('exampleModal');
+      document.getElementById('exTitle').textContent='Ejemplo · '+key.replace(/_/g,' ');
+      document.getElementById('exImage').src=EXAMPLE_URLS[key]||'https://via.placeholder.com/1200x700?text=Ejemplo';
+      document.getElementById('exCaption').textContent=caption||'';
+      m.classList.add('open');
+    }
+    function closeExample(){ document.getElementById('exampleModal').classList.remove('open'); }
+    window.showExample=showExample; window.closeExample=closeExample;
+
+    // Progreso
+    function updateProgress(){
+      const boxes=[...document.querySelectorAll('#sections input[type="checkbox"]')];
+      const done=boxes.filter(b=>b.checked).length;
+      const pct=boxes.length?Math.round(done*100/boxes.length):0;
+      document.getElementById('progressBar').style.width=pct+'%';
+      document.getElementById('statusChip').textContent = pct===100? 'Completado' : `En progreso · ${pct}%`;
+    }
+    window.updateProgress=updateProgress;
+
+    // Guardado / Historial (localStorage)
+    const KEY='buyrebsell_inspections_web_v1';
+    function readFileAsDataURL(file){
+      return new Promise(res=>{ const rd=new FileReader(); rd.onload=e=>res(e.target.result); rd.readAsDataURL(file); });
+    }
+    async function saveInspection(){
+      const inspector=document.getElementById('inspector').value.trim();
+      const date=document.getElementById('date').value;
+      const address=document.getElementById('address').value.trim();
+      const comments=document.getElementById('comments').value.trim();
+      const costInit=parseFloat(document.getElementById('costInit').value||'0');
+      const costFinal=parseFloat(document.getElementById('costFinal').value||'0');
+      const costPdfFile=document.getElementById('costPdf').files[0];
+      if(!inspector||!date||!address){ alert('Completa inspector, fecha y dirección.'); return; }
+      const checks=[...document.querySelectorAll('#sections .item-row')].map(row=>({
+        key: row.querySelector('input').dataset.key,
+        text: row.querySelector('span.item').textContent,
+        ok: row.querySelector('input').checked
+      }));
+      const photos=await Promise.all([...document.getElementById('photos').files].map(readFileAsDataURL));
+      const costPdf = costPdfFile ? await readFileAsDataURL(costPdfFile) : null;
+      const rec={ id: Date.now(), inspector, date, address, comments, costInit, costFinal, costPdf, checks, photos };
+      const arr=JSON.parse(localStorage.getItem(KEY)||'[]');
+      arr.push(rec); localStorage.setItem(KEY, JSON.stringify(arr));
+      loadHistory(); alert('Inspección guardada.');
+    }
+    function fmtUSD(n){ if(isNaN(n)) return '—'; return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(n); }
+    function loadHistory(){
+      const arr=JSON.parse(localStorage.getItem(KEY)||'[]');
+      const tb=document.querySelector('#historyTable tbody'); tb.innerHTML='';
+      arr.forEach(r=>{
+        const pct=Math.round(100*r.checks.filter(c=>c.ok).length/r.checks.length);
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${r.date}</td><td>${r.address}</td><td>${r.inspector}</td><td>${pct}%</td><td>${fmtUSD(r.costInit)}</td><td>${fmtUSD(r.costFinal)}</td>
+        <td>
+          <button class="btn small" onclick="loadRecord(${r.id})">Abrir</button>
+          <button class="btn small" onclick="exportPDF(${r.id})">PDF</button>
+          ${r.costPdf?`<button class='btn small ghost' onclick="openCostPdf(${r.id})">Costos (PDF)</button>`:''}
+        </td>`;
+        tb.appendChild(tr);
+      });
+      document.getElementById('historyCount').textContent=arr.length+' registros';
+    }
+    function loadRecord(id){
+      const arr=JSON.parse(localStorage.getItem(KEY)||'[]');
+      const r=arr.find(x=>x.id===id); if(!r) return;
+      document.getElementById('inspector').value=r.inspector;
+      document.getElementById('date').value=r.date;
+      document.getElementById('address').value=r.address;
+      document.getElementById('comments').value=r.comments||'';
+      document.getElementById('costInit').value=r.costInit||'';
+      document.getElementById('costFinal').value=r.costFinal||'';
+      const map=new Map(r.checks.map(c=>[c.key,c.ok]));
+      document.querySelectorAll('#sections input[type="checkbox"]').forEach(cb=>cb.checked=!!map.get(cb.dataset.key));
+      updateProgress(); updateHeaderCosts();
+    }
+    function openCostPdf(id){
+      const arr=JSON.parse(localStorage.getItem(KEY)||'[]');
+      const r=arr.find(x=>x.id===id); if(!r||!r.costPdf) return; window.open(r.costPdf,'_blank');
+    }
+
+    // Encabezado de costos en tiempo real
+    function updateHeaderCosts(){
+      const init=parseFloat(document.getElementById('costInit').value||'');
+      const fin=parseFloat(document.getElementById('costFinal').value||'');
+      const txt=(isNaN(init)&&isNaN(fin))? 'Costos: —' : `Costos: Inicial ${fmtUSD(init||0)} · Final ${fmtUSD(fin||0)}`;
+      document.getElementById('costHeader').textContent=txt;
+    }
+    ['costInit','costFinal'].forEach(id=>document.getElementById(id).addEventListener('input',updateHeaderCosts));
+
+    // Exportar PDF
+    function exportPDF(id){
+      const { jsPDF } = window.jspdf; const doc=new jsPDF({unit:'pt',format:'a4'});
+      const margin=40; let y=margin;
+      const arr=JSON.parse(localStorage.getItem(KEY)||'[]');
+      let r = id? arr.find(x=>x.id===id) : null;
+      if(!r){
+        const inspector=document.getElementById('inspector').value.trim();
+        const date=document.getElementById('date').value;
+        const address=document.getElementById('address').value.trim();
+        const comments=document.getElementById('comments').value.trim();
+        const costInit=parseFloat(document.getElementById('costInit').value||'0');
+        const costFinal=parseFloat(document.getElementById('costFinal').value||'0');
+        const checks=[...document.querySelectorAll('#sections .item-row')].map(row=>({ text: row.querySelector('span.item').textContent, ok: row.querySelector('input').checked }));
+        r={inspector,date,address,comments,checks,photos:[],costInit,costFinal};
+      }
+      doc.setFont('helvetica','bold'); doc.setFontSize(16);
+      doc.text('BuyRebsell · Inspección Final', margin, y); y+=20;
+      doc.setFont('helvetica','normal'); doc.setFontSize(11);
+      doc.text('Dirección: '+(r.address||''), margin, y); y+=14;
+      doc.text('Fecha: '+(r.date||''), margin, y); y+=14;
+      doc.text('Inspector: '+(r.inspector||''), margin, y); y+=14;
+      doc.text('Costo inicial: '+(isNaN(r.costInit)?'—':new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(r.costInit)), 360, y-28);
+      doc.text('Costo final: '+(isNaN(r.costFinal)?'—':new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(r.costFinal)), 360, y-14);
+      y+=6;
+      if(r.comments){ doc.setFont('helvetica','bold'); doc.text('Comentarios', margin, y); y+=14; doc.setFont('helvetica','normal'); const split=doc.splitTextToSize(r.comments, 515); split.forEach(t=>{ if(y>770){doc.addPage(); y=margin;} doc.text(t,margin,y); y+=14;}); y+=6; }
+      doc.setFont('helvetica','bold'); doc.text('Checklist', margin, y); y+=14; doc.setFont('helvetica','normal');
+      r.checks.forEach(c=>{ const line=(c.ok?'✔ ':'✘ ')+c.text; const lines=doc.splitTextToSize(line,515); lines.forEach(ln=>{ if(y>770){doc.addPage(); y=margin;} doc.text(ln,margin,y); y+=14;}); });
+      if(r.photos && r.photos.length){ if(y>740){doc.addPage(); y=margin;} doc.setFont('helvetica','bold'); doc.text('Fotos', margin, y); y+=14; const w=240,h=160; let col=0; r.photos.slice(0,8).forEach(src=>{ if(y>760){doc.addPage(); y=margin; col=0;} try{doc.addImage(src,'JPEG', margin+col*(w+15), y, w, h);}catch(e){} col=(col+1)%2; if(col===0) y+=h+16;}); if(col!==0) y+=h+16; }
+      const safeAddr=(r.address||'propiedad').replace(/[^A-Za-z0-9]+/g,'_');
+      const safeDate=(r.date||'').replace(/[^A-Za-z0-9]+/g,'');
+      const fname='Inspeccion_'+safeAddr+'_'+safeDate+'.pdf';
+      doc.save(fname);
+    }
+
+    document.getElementById('btnSave').addEventListener('click',saveInspection);
+    document.getElementById('btnPdf').addEventListener('click',()=>exportPDF());
+    document.getElementById('btnClear').addEventListener('click',()=>{
+      if(!confirm('¿Limpiar el formulario actual?')) return;
+      document.querySelectorAll('#formCard input, #formCard textarea').forEach(el=>{ if(el.type==='checkbox') el.checked=false; else if(el.type!=='button' && el.type!=='file') el.value=''; });
+      document.querySelectorAll('#sections input[type="checkbox"]').forEach(cb=>cb.checked=false);
+      updateProgress(); updateHeaderCosts();
+    });
+
+    function loadHistory(){
+      const arr=JSON.parse(localStorage.getItem(KEY)||'[]');
+      const tb=document.querySelector('#historyTable tbody'); tb.innerHTML='';
+      arr.forEach(r=>{ const pct=Math.round(100*r.checks.filter(c=>c.ok).length/r.checks.length); const tr=document.createElement('tr'); tr.innerHTML=`<td>${r.date}</td><td>${r.address}</td><td>${r.inspector}</td><td>${pct}%</td><td>${fmtUSD(r.costInit)}</td><td>${fmtUSD(r.costFinal)}</td><td><button class='btn small' onclick='loadRecord(${r.id})'>Abrir</button> <button class='btn small' onclick='exportPDF(${r.id})'>PDF</button> ${r.costPdf?`<button class='btn small ghost' onclick='openCostPdf(${r.id})'>Costos (PDF)</button>`:''}</td>`; tb.appendChild(tr); });
+      document.getElementById('historyCount').textContent = (JSON.parse(localStorage.getItem(KEY)||'[]').length)+' registros';
+    }
+
+    // Inicializar
+    updateProgress(); updateHeaderCosts(); loadHistory();
+  </script>
+</body>
+</html>
